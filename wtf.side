@@ -1,0 +1,108 @@
+{
+  "id": "8b4080f5-0f69-4635-abde-6f2e724ff178",
+  "version": "2.0",
+  "name": "liyf",
+  "url": "http://localhost:8080",
+  "tests": [{
+    "id": "0b7f557e-b7bd-4f7b-90a1-4d5ffb20a718",
+    "name": "Untitled",
+    "commands": [{
+      "id": "4ab8bc89-06ff-4e42-a672-3922aae74d99",
+      "comment": "",
+      "command": "open",
+      "target": "/Login",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fe0e7eea-65a7-4683-8959-427666b470da",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "639x831",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f4f42ce0-633c-4af2-8cb6-916ee39d5542",
+      "comment": "",
+      "command": "click",
+      "target": "id=TestLoginLink_button",
+      "targets": [
+        ["id=TestLoginLink_button", "id"],
+        ["css=#TestLoginLink_button", "css:finder"],
+        ["xpath=//button[@id='TestLoginLink_button']", "xpath:attributes"],
+        ["xpath=//form[@id='TestLoginLink']/button", "xpath:idRelative"],
+        ["xpath=//body/div/div/div/form/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Test Login (John Doe)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6c296e5f-491b-4198-a7ee-002ae06fcf9b",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Tools",
+      "targets": [
+        ["linkText=Tools", "linkText"],
+        ["css=.btn-primary:nth-child(6)", "css:finder"],
+        ["xpath=(//a[contains(text(),'Tools')])[2]", "xpath:link"],
+        ["xpath=//div[@id='content']/div/div/div/div/a[5]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/vapps/tools/dashboard')])[2]", "xpath:href"],
+        ["xpath=//a[5]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e6145ed0-3ba5-471b-823f-1443bcb6e031",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Auto Screens",
+      "targets": [
+        ["linkText=Auto Screens", "linkText"],
+        ["css=.panel:nth-child(1) .panel-body > .btn:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Auto Screens')]", "xpath:link"],
+        ["xpath=//div[@id='content']/div/div/div/div/div/div/div/div[2]/div/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/vapps/tools/AutoScreen/MainEntityList')])[2]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Auto Screens')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ae5924af-6f5b-46b9-8cdd-768762c62e01",
+      "comment": "",
+      "command": "click",
+      "target": "id=EntityList_aen_0_find",
+      "targets": [
+        ["id=EntityList_aen_0_find", "id"],
+        ["linkText=Billing Account", "linkText"],
+        ["css=#EntityList_aen_0_find", "css:finder"],
+        ["xpath=//a[contains(text(),'Billing Account')]", "xpath:link"],
+        ["xpath=//a[@id='EntityList_aen_0_find']", "xpath:attributes"],
+        ["xpath=//table[@id='EntityList_table']/tbody/tr/td[2]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/vapps/tools/AutoScreen/AutoFind?aen=mantle.account.billing.BillingAccount')]", "xpath:href"],
+        ["xpath=//td[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Billing Account')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2990be73-256c-428b-996e-617b324255f7",
+      "comment": "",
+      "command": "click",
+      "target": "css=form > .btn",
+      "targets": [
+        ["css=form > .btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='content']/div/div/div/div/div/div/form/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Entity List')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "90094ac3-fb6f-4930-9164-4ef2309261d1",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["0b7f557e-b7bd-4f7b-90a1-4d5ffb20a718"]
+  }],
+  "urls": ["http://localhost:8080/"],
+  "plugins": []
+}
