@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="KatalonGroovyGenerator" tests="1" skipped="0" failures="1" errors="0" timestamp="2020-06-02T03:30:36" hostname="pop-os" time="1.829">
+<testsuite name="KatalonGroovyGenerator" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-06-02T04:14:12" hostname="pop-os" time="0.841">
   <properties/>
-  <testcase name="first test" classname="KatalonGroovyGenerator" time="1.829">
-    <failure message="groovy.lang.MissingMethodException: No signature of method: KatalonGroovyGenerator.waitUntil() is applicable for argument types: (org.openqa.selenium.support.ui.ExpectedConditions$22) values: [element to be clickable: By.xpath: xpath=/html/body/div[1]/div[2]/div/div/div/div/a[7]]&#10;Possible solutions: waitUntil(org.openqa.selenium.support.ui.ExpectedConditions), waitUntil(org.openqa.selenium.By)" type="groovy.lang.MissingMethodException">groovy.lang.MissingMethodException: No signature of method: KatalonGroovyGenerator.waitUntil() is applicable for argument types: (org.openqa.selenium.support.ui.ExpectedConditions$22) values: [element to be clickable: By.xpath: xpath=/html/body/div[1]/div[2]/div/div/div/div/a[7]]
-Possible solutions: waitUntil(org.openqa.selenium.support.ui.ExpectedConditions), waitUntil(org.openqa.selenium.By)
-	at KatalonGroovyGenerator.click(KatalonGroovyGenerator.groovy:67)
-	at KatalonGroovyGenerator.first test(KatalonGroovyGenerator.groovy:46)
-</failure>
-  </testcase>
+  <testcase name="first test" classname="KatalonGroovyGenerator" time="0.841"/>
   <system-out><![CDATA[Start Framework Browser Tests
 	Importing Gecko Driver (if this fails you may need to change the path in the code)
-Browser Tests Done!
+finishedBrowser Tests Done!
 ]]></system-out>
-  <system-err><![CDATA[1591068634401	mozrunner::runner	INFO	Running command: "/usr/lib/firefox/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofiledtxiRN"
-1591068634659	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
-1591068634904	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
-1591068634904	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
-1591068634904	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
-1591068634904	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
-1591068636238	Marionette	INFO	Listening on port 40199
-1591068636305	Marionette	WARN	TLS certificate errors will be ignored for this session
-Jun 01, 2020 9:30:36 PM org.openqa.selenium.remote.ProtocolHandshake createSession
+  <system-err><![CDATA[1591071250526	mozrunner::runner	INFO	Running command: "/usr/lib/firefox/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileJ3vqNd"
+1591071250775	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
+1591071251042	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1591071251042	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
+1591071251042	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1591071251042	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1591071252378	Marionette	INFO	Listening on port 37409
+1591071252430	Marionette	WARN	TLS certificate errors will be ignored for this session
+Jun 01, 2020 10:14:12 PM org.openqa.selenium.remote.ProtocolHandshake createSession
 INFO: Detected dialect: W3C
-1591068638259	Marionette	INFO	Stopped listening on port 40199
+1591071253416	Marionette	INFO	Stopped listening on port 37409
 ]]></system-err>
 </testsuite>

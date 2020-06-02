@@ -6,15 +6,16 @@ import org.openqa.selenium.support.ui.*
 import spock.lang.*
 
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 import java.util.function.Function
 
 class KatalonGroovyGenerator extends Specification{
   @Shared WebDriver driver = new FirefoxDriver()
   @Shared Actions actions = new Actions(driver)
-  @Shared Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+  @Shared Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(5))
+
   @Shared Select select
 
-  @Shared long defaultWaitTimeInSeconds = 5
 
   //runs only before the first test
   def setupSpec(){
@@ -40,78 +41,87 @@ class KatalonGroovyGenerator extends Specification{
     when:
     open("https://demo.moqui.org")
 
-    //ExpectedConditions conditions =
-    waitUntil(By.id("TestLoginLink_button")).click()
+    actions.click(
+        wait.until(new Function<WebDriver,WebElement>(){
+          public WebElement apply(WebDriver driver){
+            return driver.findElement(By.xpath("//*[@id=\"TestLoginLink_button\"]"))
+          }
+        })
+    )
 
-    click(By.xpath("xpath=/html/body/div[1]/div[2]/div/div/div/div/a[7]"))
+
+//    driver.findElement(By.id("TestLoginLink_button"))
+
+    System.print("finished")
 
     then:
     true == true
   }
   //waitUntil
-  WebElement waitUntil(By by){
-    return wait.until(new Function<WebDriver,WebElement>(){
-      public WebElement apply(WebDriver driver){
-        return driver.findElement(by)
-      }
-    })
-  }
+  //def waitUntil(By by){
+    //return wait.until(new Function<WebDriver,WebElement>(){
+    //  public WebElement apply(WebDriver driver){
+    //    return driver.findElement(by)
+    //  }
+    //})
+  //}
 
-  def waitUntil(ExpectedConditions conditions){
-    wait.until(conditions)
-  }
+  //def waitUntil(ExpectedConditions conditions){
+    //WebDriverWait driverWait = new WebDriverWait(driver,defaultWaitTimeInSeconds)
+    //wait.until(conditions)
+  //}
 
   //action and wait
   //click
-  def click(By element){
-    waitUntil(ExpectedConditions.elementToBeClickable(element)).click()
-  }
+//  def click(By element){
+    //waitUntil(ExpectedConditions.elementToBeClickable(element)).click()
+    //}
 
   //sendKeys
-  def sendKeys(By element, String keys){
-    waitUntil(element).sendKeys(keys)
-  }
+//  def sendKeys(By element, String keys){
+    //waitUntil(element).sendKeys(keys)
+    //}
 
   //wait for
   //alert
-  def waitForAlertPresent(By element){
-    waitUntil(ExpectedConditions.alertIsPresent())
-  }
-  def waitForAlertNotPresent(By element){
-    waitUntil(!ExpectedConditions.alertIsPresent())
-  }
+//  def waitForAlertPresent(By element){
+    //waitUntil(ExpectedConditions.alertIsPresent())
+    //}
+//  def waitForAlertNotPresent(By element){
+//    waitUntil(!ExpectedConditions.alertIsPresent())
+    //}
 
   //element
-  def waitForElementPresent(By element){
-    waitUntil(ExpectedConditions.presenceOfElementLocated(element))
-  }
-  def waitForElementNotPresent(By element){
-    waitUntil(ExpectedConditions.stalenessOf(element))
-  }
+//  def waitForElementPresent(By element){
+//    waitUntil(ExpectedConditions.presenceOfElementLocated(element))
+    //}
+//  def waitForElementNotPresent(By element){
+//    waitUntil(ExpectedConditions.stalenessOf(element))
+    //}
 
   //text
-  def waitForTextPresent(By element, String text){
-    waitUntil(ExpectedConditions.textToBePresentInElementLocated(element,text))
-  }
-  def waitForTextNotPresent(By element, String text){
-    waitUntil(ExpectedConditions.not(ExpectedConditions.textToBePresentInElementLocated(element,text)))
-  }
+//  def waitForTextPresent(By element, String text){
+//    waitUntil(ExpectedConditions.textToBePresentInElementLocated(element,text))
+    //}
+//  def waitForTextNotPresent(By element, String text){
+//    waitUntil(ExpectedConditions.not(ExpectedConditions.textToBePresentInElementLocated(element,text)))
+    //}
 
   //value
-  def waitForValue(By element, String text){
-    waitUntil(ExpectedConditions.textToBePresentInElementValue(element,text))
-  }
-  def waitForNotValue(By element, String text){
-    waitUntil(ExpectedConditions.not(ExpectedConditions.textToBePresentInElementValue(element,text)))
-  }
+//  def waitForValue(By element, String text){
+//    waitUntil(ExpectedConditions.textToBePresentInElementValue(element,text))
+    //}
+//  def waitForNotValue(By element, String text){
+//    waitUntil(ExpectedConditions.not(ExpectedConditions.textToBePresentInElementValue(element,text)))
+    //}
 
   //visible
-  def waitForVisible(By element){
-    waitUntil(ExpectedConditions.visibilityOf(element))
-  }
-  def waitForNotVisible(By element){
-    waitUntil(ExpectedConditions.invisibilityOf(element))
-  }
+//  def waitForVisible(By element){
+//    waitUntil(ExpectedConditions.visibilityOf(element))
+    //}
+//  def waitForNotVisible(By element){
+//    waitUntil(ExpectedConditions.invisibilityOf(element))
+    //}
 
   //random (self described... kinda)
   def open(String target){
@@ -122,35 +132,35 @@ class KatalonGroovyGenerator extends Specification{
     }
   }
 
-  def pause(long time){
-    try{
-      return new WebDriverWait(driver, Duration.ofSeconds(time).getSeconds())
-    }catch(Exception e){
-      e.printStackTrace()
-    }
-  }
+//  def pause(long time){
+    //try{
+//      new WebDriverWait(driver, Duration.ofSeconds(time).getSeconds())
+    //}catch(Exception e){
+//      e.printStackTrace()
+    //}
+    //}
 
-  def refresh(){
-    driver.navigate().refresh()
-  }
+//  def refresh(){
+//    driver.navigate().refresh()
+    //}
 
-  def selectWindow(){
-    int length = driver.getWindowHandles().size()
-    driver.switchTo(driver.getWindowHandles()[length-1])
-  }
+//  def selectWindow(){
+    //int length = driver.getWindowHandles().size()
+//    driver.switchTo(driver.getWindowHandles()[length-1])
+    //}
 
-  def selectFrame(By element){
-    waitUntil(ExpectedConditions.visibilityOfElementLocated(element))
-    driver.switchTo().frame(element) //wrong syntax?
-  }
+//  def selectFrame(By element){
+//    waitUntil(ExpectedConditions.visibilityOfElementLocated(element))
+//    driver.switchTo().frame(element) //wrong syntax?
+    //}
 
-  def goBack(){
-    driver.navigate().back()
-  }
+//  def goBack(){
+//    driver.navigate().back()
+    //}
 
-  def assertConfirmation(){
-    driver.switchTo().alert().accept()
-  }
+//  def assertConfirmation(){
+//    driver.switchTo().alert().accept()
+    //}
 }
 
 /**
