@@ -44,17 +44,27 @@ class KatalonGroovyGenerator extends Specification{
     waitUntil(By.id("TestLoginLink_button")).click()
 
     click(By.xpath("xpath=/html/body/div[1]/div[2]/div/div/div/div/a[7]"))
-    driver.navigate().refresh()
 
     then:
     true == true
+  }
+  //waitUntil
+  WebElement waitUntil(By by){
+    return wait.until(new Function<WebDriver,WebElement>(){
+      public WebElement apply(WebDriver driver){
+        return driver.findElement(by)
+      }
+    })
+  }
+
+  def waitUntil(ExpectedConditions conditions){
+    wait.until(conditions)
   }
 
   //action and wait
   //click
   def click(By element){
-    waitForElementPresent(element)
-    element.
+    waitUntil(ExpectedConditions.elementToBeClickable(element)).click()
   }
 
   //sendKeys
@@ -62,9 +72,13 @@ class KatalonGroovyGenerator extends Specification{
     waitUntil(element).sendKeys(keys)
   }
 
-  //submit
-  def submit(By element){
-    waitUntil(element).submit()
+  //wait for
+  //alert
+  def waitForAlertPresent(By element){
+    waitUntil(ExpectedConditions.alertIsPresent())
+  }
+  def waitForAlertNotPresent(By element){
+    waitUntil(!ExpectedConditions.alertIsPresent())
   }
 
   //element
@@ -99,7 +113,7 @@ class KatalonGroovyGenerator extends Specification{
     waitUntil(ExpectedConditions.invisibilityOf(element))
   }
 
-  //random (self described)
+  //random (self described... kinda)
   def open(String target){
     try{
       driver.get(target)
@@ -116,11 +130,15 @@ class KatalonGroovyGenerator extends Specification{
     }
   }
 
+  def refresh(){
+    driver.navigate().refresh()
+  }
 
   def selectWindow(){
     int length = driver.getWindowHandles().size()
     driver.switchTo(driver.getWindowHandles()[length-1])
   }
+
   def selectFrame(By element){
     waitUntil(ExpectedConditions.visibilityOfElementLocated(element))
     driver.switchTo().frame(element) //wrong syntax?
