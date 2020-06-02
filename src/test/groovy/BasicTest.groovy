@@ -45,7 +45,7 @@ class BasicTest extends Specification{
         clickElement(By.className("navbar-brand"))
     }
 
-    def "tool test"(){
+    def "tools/Entity/DataImport test"(){
         when:
         clickElement(By.linkText("Tools"))
         clickByXPath("/html/body/div[1]/div[2]/div/div/div/div/div/div[2]/div/div[2]/div/div[1]/a[1]")
