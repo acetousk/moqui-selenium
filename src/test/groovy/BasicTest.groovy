@@ -1,9 +1,9 @@
-import org.openqa.selenium.interactions.Actions
-import org.openqa.selenium.support.ui.ExpectedConditions
-import org.openqa.selenium.support.ui.WebDriverWait
-import spock.lang.*
 import org.openqa.selenium.*
 import org.openqa.selenium.firefox.*
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
+
+import spock.lang.*
 
 import java.time.Duration
 
@@ -32,7 +32,7 @@ class BasicTest extends Specification{
     }
 
     def cleanupSpec(){
-        System.println("Framework Browser Tests Successful!")
+        System.println("Framework Browser Tests Done!")
 
         driver.findElement(By.cssSelector(".glyphicon-off")).click();
         driver.quit()
@@ -46,9 +46,10 @@ class BasicTest extends Specification{
         driver.findElement(By.className("navbar-brand")).click()
     }
 
-    def "fuck"(){
+    def "tool test"(){
         when:
-        WebElement toolsButton = new WebDriverWait(driver, Duration.ofSeconds(10).getSeconds()).until(ExpectedConditions.elementToBeClickable(By.linkText("Tools")))
+        WebElement toolsButton = new WebDriverWait(driver, Duration.ofSeconds(10).getSeconds())
+                .until(ExpectedConditions.elementToBeClickable(By.linkText("Tools")))
         toolsButton.click()
 
         then:
