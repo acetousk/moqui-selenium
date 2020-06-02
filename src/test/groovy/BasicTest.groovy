@@ -2,6 +2,7 @@ import org.openqa.selenium.*
 import org.openqa.selenium.firefox.*
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
+import org.openqa.selenium.support.ui.Select
 import spock.lang.*
 
 import java.time.Duration
@@ -23,22 +24,26 @@ class BasicTest extends Specification{
         System.setProperty("webdriver.gecko.driver", "/home/acetousk/dev/java/moqui-selenium-test/geckodriver")
 
         System.println("Connecting Selenium WebDriver to Moqui through http (this may also have to be changed to wherever Moqui is being ran)")
+
         driver.get("https://demo.moqui.org")
+        clickElement(By.id("TestLoginLink_button"))
 
         driver.manage().window().setPosition(new Point(0, 0));
         driver.manage().window().setSize(new Dimension(1080, 720))
     }
 
     def cleanupSpec(){
-        System.println("Framework Browser Tests Done!")
+        driver.get("https://demo.moqui.org")
+        driver.findElement(By.cssSelector(".glyphicon-off")).click()
+        System.println(getAlertTextAndAccept())
 
-        driver.findElement(By.cssSelector(".glyphicon-off")).click();
         driver.quit()
+
+        System.println("Framework Browser Tests Done!")
     }
 
     def setup(){
         driver.get("https://demo.moqui.org")
-        clickElement(By.id("TestLoginLink_button"))
     }
 
     def cleanup(){
@@ -48,10 +53,9 @@ class BasicTest extends Specification{
     def "tools/Entity/DataImport test"(){
         when:
         clickElement(By.linkText("Tools"))
-        clickByXPath("/html/body/div[1]/div[2]/div/div/div/div/div/div[2]/div/div[2]/div/div[1]/a[1]")
+        clickElement(By.linkText("Data Import"))
         clearAndSendKeys(By.cssSelector("#ImportData_timeout"),"30")
         clickBySelector("#ImportData_dummyFks > input:nth-child(1)")
-        clickByXPath("/html/body/div[1]/div[2]/div/div/div/div/div/form/fieldset/div[2]/div/div[2]/div/span/input")
         sendKeys(By.cssSelector("#ImportData_types"),"foo")
         sendKeys(By.xpath("//*[@id=\"ImportData_components\"]"),"goo")
         clickBySelector("#ImportData_accordion_heading2 > h5:nth-child(1) > a:nth-child(1)")
@@ -69,10 +73,36 @@ class BasicTest extends Specification{
         String alert2 = getAlertTextAndAccept()
 
         then:
-        "https://demo.moqui.org/vapps/tools/Entity/DataImport" == driver.getCurrentUrl()
+        "https://demo.moqui.org/vapps/tools/Entity/DataImport" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/DataImport" == driver.getCurrentUrl()
         alert1 == "Are you sure you want to load data, only creating missing records?"
         alert2 == "Are you sure you want to load data, creating new and updating existing records? If in doubt, cancel this and double check."
     }
+
+    def "tools/Entity/DataExport test"(){
+        when:
+        clickElement(By.linkText("Tools"))
+        clickElement(By.linkText("Data Export"))
+        clearAndSendKeys(By.cssSelector("#ExportData_dependentLevels"),"5")
+        sendKeys(By.cssSelector("#ExportData_masterName"),"MasterName")
+        clearAndSendKeys(By.cssSelector("#ExportData_fromDate > input:nth-child(1)"),"2020-00-02 13:45")
+        clearAndSendKeys(By.cssSelector("#ExportData_thruDate_idate"),"2040-06-02 13:20")
+        clickBySelector("#ExportData_fileType_1 > input:nth-child(1)")
+        clickBySelector("#ExportData_output > input:nth-child(1)")
+        sendKeys(By.cssSelector("#ExportData_path"),"/")
+        clickById("ExportData_submitButton")
+        String text1 = driver.findElement(By.cssSelector(".text-inline")).getText()
+        System.println(text1)
+        select(By.cssSelector(".select2-search__field"),2)
+        select(By.cssSelector(".select2-search__field"),50)
+        select(By.cssSelector(".select2-search__field"),100)
+        select(By.cssSelector(".select2-search__field"),200)
+        clickById("ExportData_submitButton")
+
+        then:
+        "https://demo.moqui.org/vapps/tools/Entity/DataExport" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/DataExport" == driver.getCurrentUrl()
+        text1 == "No entity names specified, not exporting anything."
+    }
+
 
     def clickElement(By by){
         wait.until(ExpectedConditions.elementToBeClickable(by))
@@ -87,7 +117,17 @@ class BasicTest extends Specification{
         clickElement(By.xpath(xpath))
     }
 
+    def clickById(String id){
+        clickElement(By.id(id))
+    }
+
     def sendKeys(By by, String keys){
+        wait.until(ExpectedConditions.presenceOfElementLocated(by))
+        driver.findElement(by)
+            .sendKeys(keys)
+    }
+
+    def sendKeys(By by, Keys keys){
         wait.until(ExpectedConditions.presenceOfElementLocated(by))
         driver.findElement(by)
             .sendKeys(keys)
@@ -102,9 +142,18 @@ class BasicTest extends Specification{
 
     String getAlertTextAndAccept(){
         wait.until(ExpectedConditions.alertIsPresent())
-        String alert1 = driver.switchTo().alert().getText()
-        print(alert1)
+        String alert = driver.switchTo().alert().getText()
+        System.println(alert)
         driver.switchTo().alert().accept()
-        return alert1
+        return alert
     }
+
+    def select(By by, int downs){
+        clickElement(by)
+        for(int i in 1..downs){
+            sendKeys(by,Keys.ARROW_DOWN)
+        }
+        sendKeys(by,Keys.ENTER)
+    }
+
 }
