@@ -12,10 +12,9 @@ import java.util.function.Function
 class KatalonGroovyGenerator extends Specification{
   @Shared WebDriver driver = new FirefoxDriver()
   @Shared Actions actions = new Actions(driver)
-  @Shared Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(Duration.ofSeconds(5))
+  @Shared WebDriverWait wait = new WebDriverWait(driver, 10,10)
 
   @Shared Select select
-
 
   //runs only before the first test
   def setupSpec(){
@@ -50,7 +49,6 @@ class KatalonGroovyGenerator extends Specification{
     )
 
 
-//    driver.findElement(By.id("TestLoginLink_button"))
 
     System.print("finished")
 
