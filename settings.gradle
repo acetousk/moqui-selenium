@@ -1,3 +1,2 @@
-rootProject.name = 'moqui-selenium-test'
+rootProject.name = 'moqui-selenium'
 include 'test'
-
