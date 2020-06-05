@@ -25,7 +25,7 @@ class BasicTest extends Specification{
 
         System.println("Connecting Selenium WebDriver to Moqui through http (this may also have to be changed to wherever Moqui is being ran)")
 
-        driver.get("https://demo.moqui.org")
+        driver.get("http://localhost:8080")
         clickElement(By.id("TestLoginLink_button"))
 
         driver.manage().window().setPosition(new Point(0, 0));
@@ -33,7 +33,7 @@ class BasicTest extends Specification{
     }
 
     def cleanupSpec(){
-        driver.get("https://demo.moqui.org")
+        driver.get("http://localhost:8080")
         driver.findElement(By.cssSelector(".glyphicon-off")).click()
         System.println(getAlertTextAndAccept())
 
@@ -43,7 +43,7 @@ class BasicTest extends Specification{
     }
 
     def setup(){
-        driver.get("https://demo.moqui.org")
+        driver.get("http://localhost:8080")
     }
 
     def cleanup(){
@@ -71,9 +71,10 @@ class BasicTest extends Specification{
         String alert1 = getAlertTextAndAccept()
         clickBySelector("#ImportData_importButton")
         String alert2 = getAlertTextAndAccept()
+        String url = driver.getCurrentUrl()
 
         then:
-        "https://demo.moqui.org/vapps/tools/Entity/DataImport" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/DataImport" == driver.getCurrentUrl()
+        url.contains("tools/Entity/DataImport")
         alert1 == "Are you sure you want to load data, only creating missing records?"
         alert2 == "Are you sure you want to load data, creating new and updating existing records? If in doubt, cancel this and double check."
     }
@@ -94,17 +95,18 @@ class BasicTest extends Specification{
         System.println(text1)
         select(By.cssSelector(".select2-search__field"),2)
         select(By.cssSelector(".select2-search__field"),50)
-        select(By.cssSelector(".select2-search__field"),100)
-        select(By.cssSelector(".select2-search__field"),200)
+        select(By.cssSelector(".select2-search__field"),5)
+        select(By.cssSelector(".select2-search__field"),10)
         clickById("ExportData_submitButton")
+        String url = driver.getCurrentUrl()
 
         then:
-        "https://demo.moqui.org/vapps/tools/Entity/DataExport" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/DataExport" == driver.getCurrentUrl()
+        url.contains("tools/Entity/DataExport")
         text1 == "No entity names specified, not exporting anything."
     }
 
 
-    def "tools/Entity/DataSnapshots test"(){
+    def "tools/Entity/DataSnapshot test"(){
         when:
         clickElement(By.linkText("Tools"))
         clickElement(By.linkText("Data Snapshots"))
@@ -126,24 +128,26 @@ class BasicTest extends Specification{
 //        clickBySelector("#ImportForm_0_useTryInsert_0 > input:nth-child(1)")
 //        clearAndSendKeys(By.id("ImportForm_0_transactionTimeout_0"),"10000")
 //        clickBySelector("ImportForm_0_submitButton_0")
-
 //        clickBySelector("div.row:nth-child(8) > div:nth-child(5) > form:nth-child(1) > button:nth-child(2)")
 
+        String url = driver.getCurrentUrl()
+
         then:
-        "https://demo.moqui.org/vapps/tools/Entity/DataSnapshot" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/DataSnapshot" == driver.getCurrentUrl()
+        url.contains("tools/Entity/DataSnapshot")
         alert2 == "Really create all missing foreign keys?"
     }
 
-    def "tools/Entity/SQL Runner test"(){
+    def "tools/Entity/SQLRunner test"(){
         when:
         clickElement(By.linkText("Tools"))
         clickElement(By.linkText("SQL Runner"))
         sendKeys(By.id("SqlOptions_sql"),"BAD SQL!!!")
         clearAndSendKeys(By.id("SqlOptions_limit"),"100")
         clickById("SqlOptions_submitButton")
+        String url = driver.getCurrentUrl()
 
         then:
-        "https://demo.moqui.org/vapps/tools/Entity/SqlRunner?groupName=transactional&limit=100&submitButton=submitButton" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/SqlRunner?groupName=transactional&limit=100&submitButton=submitButton" == driver.getCurrentUrl()
+        url.contains("submitButton")
     }
 
     def "tools/Entity/Entities test"(){
@@ -155,8 +159,6 @@ class BasicTest extends Specification{
         clickById("FilterForm_submitButton")
         clickById("FilterForm_submitButton")
         clickById("EntityList_detail_0_detail")
-        clickBySelector("button.btn:nth-child(2)")
-        clickBySelector("a.btn-primary:nth-child(2)")
         clickById("RelatedEntities_link_0_find")
 
         clickBySelector("#ListEntityValue_edit_0")
@@ -169,20 +171,53 @@ class BasicTest extends Specification{
         clickById("UpdateEntityValue_submitButton")
         clearAndSendKeys(By.id("LevelsForm_dependentLevels"),"5")
         clickById("LevelsForm_submitButton")
+        String url = driver.getCurrentUrl()
 
         then:
-        "https://demo.moqui.org/vapps/tools/Entity/DataEdit/EntityDataEdit?dependentLevels=5&paymentMethodId=CustJqpCc&selectedEntity=mantle.account.method.PaymentMethod&submitButton=submitButton" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/DataEdit/EntityDataEdit?dependentLevels=5&paymentMethodId=CustJqpCc&selectedEntity=mantle.account.method.PaymentMethod&submitButton=submitButton" == driver.getCurrentUrl()
-
+        url.contains("tools/Entity")
     }
 
-    def "tools/Entity/ test"(){
+    def "tools/Entity/DataViews test"(){
         when:
         clickElement(By.linkText("Tools"))
-        //clickElement(By.linkText("Data Import"))
-
+        clickElement(By.linkText("Data Views"))
+        sendKeys(By.id("CreateDbViewEntity_dbViewEntityName"),"Entityname")
+        sendKeys(By.id("CreateDbViewEntity_packageName"),"packagename")
+        clickById("CreateDbViewEntity_submitButton")
+        clickById("ListDbViewEntities_edit_0_edit")
+        clickBySelector("a.btn-primary:nth-child(1)")
+        String url = driver.getCurrentUrl()
 
         then:
-        "https://demo.moqui.org/vapps/tools/dashboard" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/dashboard" == driver.getCurrentUrl()
+        url.contains("Entityname")
+    }
+
+    def "tools/Entity/SpeedTest test"(){
+        when:
+        clickElement(By.linkText("Tools"))
+        clickElement(By.linkText("Speed Test"))
+        clearAndSendKeys(By.id("SelectBaseCalls_baseCalls"),"100")
+        clickById("SelectBaseCalls_submitButton")
+        String url = driver.getCurrentUrl()
+
+        then:
+        url.contains("tools/Entity/SpeedTest")
+    }
+
+    def "tools/Entity/QueryStats test"(){
+        when:
+        clickElement(By.linkText("Tools"))
+        clickElement(By.linkText("Query Stats"))
+        clickBySelector(".inner > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > form:nth-child(1) > button:nth-child(1)")
+
+        sendKeys(By.id("FilterForm_entityFilter"),"Entity")
+        sendKeys(By.id("FilterForm_sqlFilter"),"sqlfilter")
+
+        clickById("FilterForm_submitButton")
+        String url = driver.getCurrentUrl()
+
+        then:
+        url.contains("tools/Entity/QueryStats")
     }
 
     def clickElement(By by){
