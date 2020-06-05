@@ -10,7 +10,7 @@ import java.time.Duration
 class BasicTest extends Specification{
 
     @Shared WebDriver driver = new FirefoxDriver()
-    @Shared WebDriverWait wait = new WebDriverWait(driver,5,10)
+    @Shared WebDriverWait wait = new WebDriverWait(driver,10,10)
 
     //set this to true to make a browser not pop up for tests (it will minimize the browser)
     //boolean minimized = true
@@ -103,6 +103,87 @@ class BasicTest extends Specification{
         text1 == "No entity names specified, not exporting anything."
     }
 
+
+    def "tools/Entity/DataSnapshots test"(){
+        when:
+        clickElement(By.linkText("Tools"))
+        clickElement(By.linkText("Data Snapshots"))
+        clickBySelector(".inner > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > form:nth-child(6) > button:nth-child(1)")
+        String alert2 = getAlertTextAndAccept()
+
+        clickById("UploadDialog-button")
+        clickById("UploadSnapshot_submitButton")
+        clickBySelector("#UploadDialog > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > button:nth-child(1)")
+
+        clickById("ExportDialog-button")
+        clickBySelector(".select2-selection__rendered")
+        select(By.id("select2-ExportData_entitiesToSkip-results"),5)
+        clickById("ExportData_submitButton")
+
+        //TODO: figure out why the following isn't waiting to click
+//        clickById("ImportDialog_0-button")
+//        clickBySelector("#ImportForm_0_dummyFks_0 > input:nth-child(1)")
+//        clickBySelector("#ImportForm_0_useTryInsert_0 > input:nth-child(1)")
+//        clearAndSendKeys(By.id("ImportForm_0_transactionTimeout_0"),"10000")
+//        clickBySelector("ImportForm_0_submitButton_0")
+
+//        clickBySelector("div.row:nth-child(8) > div:nth-child(5) > form:nth-child(1) > button:nth-child(2)")
+
+        then:
+        "https://demo.moqui.org/vapps/tools/Entity/DataSnapshot" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/DataSnapshot" == driver.getCurrentUrl()
+        alert2 == "Really create all missing foreign keys?"
+    }
+
+    def "tools/Entity/SQL Runner test"(){
+        when:
+        clickElement(By.linkText("Tools"))
+        clickElement(By.linkText("SQL Runner"))
+        sendKeys(By.id("SqlOptions_sql"),"BAD SQL!!!")
+        clearAndSendKeys(By.id("SqlOptions_limit"),"100")
+        clickById("SqlOptions_submitButton")
+
+        then:
+        "https://demo.moqui.org/vapps/tools/Entity/SqlRunner?groupName=transactional&limit=100&submitButton=submitButton" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/SqlRunner?groupName=transactional&limit=100&submitButton=submitButton" == driver.getCurrentUrl()
+    }
+
+    def "tools/Entity/Entities test"(){
+        when:
+        clickElement(By.linkText("Tools"))
+        clickElement(By.linkText("Entities"))
+
+        sendKeys(By.id("FilterForm_filterRegexp"),"BitcoinWallet")
+        clickById("FilterForm_submitButton")
+        clickById("FilterForm_submitButton")
+        clickById("EntityList_detail_0_detail")
+        clickBySelector("button.btn:nth-child(2)")
+        clickBySelector("a.btn-primary:nth-child(2)")
+        clickById("RelatedEntities_link_0_find")
+
+        clickBySelector("#ListEntityValue_edit_0")
+        clearAndSendKeys(By.id("UpdateEntityValue_description"),"Vx Rbt ************914")
+        sendKeys(By.id("UpdateEntityValue_ledgerBalance"),"72832")
+        sendKeys(By.id("UpdateEntityValue_availableBalance"),"2131")
+        clearAndSendKeys(By.id("UpdateEntityValue_balanceDate_idate"),"2020-04-25 09:00")
+        sendKeys(By.id("UpdateEntityValue_imageUrl"),"https://youtu.be/5SoJIEwe3cA?t=1696")
+        sendKeys(By.id("UpdateEntityValue_paymentFraudEvidenceId"),"worlds 2020 was FAKE!")
+        clickById("UpdateEntityValue_submitButton")
+        clearAndSendKeys(By.id("LevelsForm_dependentLevels"),"5")
+        clickById("LevelsForm_submitButton")
+
+        then:
+        "https://demo.moqui.org/vapps/tools/Entity/DataEdit/EntityDataEdit?dependentLevels=5&paymentMethodId=CustJqpCc&selectedEntity=mantle.account.method.PaymentMethod&submitButton=submitButton" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/DataEdit/EntityDataEdit?dependentLevels=5&paymentMethodId=CustJqpCc&selectedEntity=mantle.account.method.PaymentMethod&submitButton=submitButton" == driver.getCurrentUrl()
+
+    }
+
+    def "tools/Entity/ test"(){
+        when:
+        clickElement(By.linkText("Tools"))
+        clickElement(By.linkText("Data Import"))
+
+
+        then:
+        "https://demo.moqui.org/vapps/tools/Entity/" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/" == driver.getCurrentUrl()
+    }
 
     def clickElement(By by){
         wait.until(ExpectedConditions.elementToBeClickable(by))
