@@ -178,11 +178,11 @@ class BasicTest extends Specification{
     def "tools/Entity/ test"(){
         when:
         clickElement(By.linkText("Tools"))
-        clickElement(By.linkText("Data Import"))
+        //clickElement(By.linkText("Data Import"))
 
 
         then:
-        "https://demo.moqui.org/vapps/tools/Entity/" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/Entity/" == driver.getCurrentUrl()
+        "https://demo.moqui.org/vapps/tools/dashboard" == driver.getCurrentUrl() || "https://demo.moqui.org/apps/tools/dashboard" == driver.getCurrentUrl()
     }
 
     def clickElement(By by){
