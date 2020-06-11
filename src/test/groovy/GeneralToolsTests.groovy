@@ -48,6 +48,60 @@ class GeneralToolsTests extends Specification{
     clickElement(By.className("navbar-brand"))
   }
 
+  def "tools/GeneralTools/AutoScreens test"(){
+    when:
+    clickElement(By.linkText("Tools"))
+    clickElement(By.linkText("Auto Screens"))
+    clickBySelector("#select2-SelectEntity_aen-container")
+    select(By.cssSelector(".select2-selection"),10)
+    select(By.cssSelector(".select2-selection"),7)
+    clickById("EntityList_aen_82_find")//sales opportunity stage
+    clickById("FindValueDialog-button")
+    clickBySelector("#FindEntityValue > fieldset:nth-child(2) > div:nth-child(1) > div:nth-child(2) > span:nth-child(1) > span:nth-child(1) > input:nth-child(1)")
+    sendKeys(By.id("FindEntityValue_opportunityStageId"),"Stage Id")
+    sendKeys(By.id("FindEntityValue_description"),"description")
+    sendKeys(By.id("FindEntityValue_defaultProbability_from"),"0")
+    sendKeys(By.id("FindEntityValue_defaultProbability_thru"),"5")
+    sendKeys(By.id("FindEntityValue_sequenceNum_from"),"1")
+    sendKeys(By.id("FindEntityValue_sequenceNum_thru"),"3")
+    clickById("FindEntityValue_submitButton")
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("AutoScreen/AutoFind")
+  }
+
+
+  def "tools/GeneralTools/ArtifactStats test"(){
+    when:
+    clickElement(By.linkText("Tools"))
+    clickElement(By.linkText("Artifact Stats"))
+    clickById("ServiceInfoList_name_13_serviceReference")//org.moqui
+    //clickById("SelectServiceInput_submitButton")//start moqui.org's service
+    clickBySelector("tr.form-list-nav-row:nth-child(1) > th:nth-child(1) > nav:nth-child(1) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1)")//page 2
+    clickById("ServiceList_detail_0_serviceDetail")
+
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("Service/ServiceDetail")
+  }
+
+  def "tools/GeneralTools/Services test"(){
+    when:
+    clickElement(By.linkText("Tools"))
+    clickElement(By.linkText("Services"))
+    clickById("ServiceList_run_22_serviceRun")//mantle.account.FinancialAccountServices.reverse#InvoiceTransactions
+
+
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("Service/ServiceRun")
+  }
+
+
+
   def clickElement(By by){
     wait.until(ExpectedConditions.elementToBeClickable(by))
     driver.findElement(by).click()
@@ -99,5 +153,4 @@ class GeneralToolsTests extends Specification{
     }
     sendKeys(by,Keys.ENTER)
   }
-
 }
