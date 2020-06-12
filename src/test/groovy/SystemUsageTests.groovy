@@ -48,10 +48,11 @@ class SystemUsageTests extends Specification{
     clickElement(By.className("navbar-brand"))
   }
 
-  def "system/ServerAdmin/ test"(){
+  def "system/Usage/ArtifactHitSummary test"(){
     when:
     clickElement(By.linkText("System"))
-    clickElement(By.linkText(""))
+    clickElement(By.linkText("Artifact Hit Summary"))
+    //TODO: add artifacts to make a summary worth it
 
     String url = driver.getCurrentUrl()
 
@@ -59,64 +60,64 @@ class SystemUsageTests extends Specification{
     url.contains("system")
   }
 
+  def "system/Usage/ArtifactHitBins test"(){
+    when:
+    clickElement(By.linkText("System"))
+    clickElement(By.linkText("Artifact Hit Bins"))
+    //TODO: add artifacts to make a hit bin worth it
 
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("system")
+  }
+
+  def "system/Usage/AuditLog test"(){
+    when:
+    clickElement(By.linkText("System"))
+    clickElement(By.linkText("Audit Log"))
+    //TODO: not much to do here change that
+
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("system")
+  }
+
+  def "system/Usage/Visits test"(){
+    when:
+    clickElement(By.linkText("System"))
+    clickElement(By.linkText("Visits"))
+
+    clickById("VisitList_hdialog_button")
+
+    sendKeys(By.id("VisitList_header_visitId"),"100000")
+    clickById("VisitList_header_findButton")
+
+    clickById("VisitList_visitId_0_visitDetail")
+    //clickById("VisitArtifactHitList_hdialog_button")
+
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("Visit/VisitDetail?visitId=100000")
+  }
+
+  def "system/Usage/LogViewer test"(){
+    when:
+    clickElement(By.linkText("System"))
+    clickElement(By.linkText("Log Viewer"))
+    clickById("LogMessageDocuments_user_id_0_userAccountDetail")
+
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("Security/UserAccount/UserAccountDetail")
+  }
 
   def clickElement(By by){
     wait.until(ExpectedConditions.elementToBeClickable(by))
     driver.findElement(by).click()
-  }
-
-
-  def "system/ServerAdmin/ServiceJobs test"(){
-    when:
-    System.println("If this test fails, (this will often happen if this test is run more than once) manually delete the parameter here http://localhost:8080/vapps/system/ServiceJob/Jobs/ServiceJobDetail?jobName=run_EntitySyncAll_frequent ")
-
-    clickElement(By.linkText("System"))
-    clickElement(By.linkText("Service Jobs"))
-    sendKeys(By.id("ServiceJobList_jobName"),"run_EntitySyncAll_frequent")
-    clickById("ServiceJobList_findButton")
-    clickById("ServiceJobList_jobName_0_serviceJobDetail")
-    clickBySelector("button.btn:nth-child(2)")//run jobs
-
-    String alert1 = getAlertTextAndAccept()
-
-    //clickById("ServiceJobForm_submitButton")
-
-    clickById("AddParameterDialog-button")
-    sendKeys(By.id("CreateJobParameter_parameterName"),"name")
-    sendKeys(By.id("CreateJobParameter_parameterValue"),"value")
-    clickById("CreateJobParameter_submitButton")
-
-    clearAndSendKeys(By.id("UpdateJobParameter_parameterValue_0"),"value2")
-    clickById("UpdateJobParameter_submitButton_0")
-    //clickById("UpdateJobParameter_deleteLink_0_deleteJobParameter_button")
-    //String alert2 = getAlertTextAndAccept()
-
-    clickById("AddUserDialog-button")
-    sendKeys(By.id("CreateJobUser_userId_ac"),"User")
-    clickById("CreateJobUser_submitButton")
-
-    String url = driver.getCurrentUrl()
-
-    then:
-    alert1.contains("Run job now with current parameters?")
-    //alert2.contains("Delete parameter?")
-    url.contains("ServiceJob/Jobs/ServiceJobDetail")
-  }
-
-  def "system/ServerAdmin/JobsRuns test"(){
-    when:
-    clickElement(By.linkText("System"))
-    clickElement(By.linkText("Jobs Runs"))
-    clickById("JobRunList_hdialog_button")
-    sendKeys(By.id("JobRunList_header_jobRunId"),"100170")
-    clickById("JobRunList_header_findButton")
-    clickById("JobRunList_jobName_0_serviceJobDetail")
-
-    String url = driver.getCurrentUrl()
-
-    then:
-    url.contains("ServiceJob/Jobs/ServiceJobDetail?jobName=autoApprove_OrdersDelayed")
   }
 
   def clickBySelector(String selector){

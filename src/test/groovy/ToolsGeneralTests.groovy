@@ -5,7 +5,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import spock.lang.Shared
 import spock.lang.Specification
 
-class GeneralToolsTests extends Specification{
+class ToolsGeneralTests extends Specification{
 
   @Shared WebDriver driver = new FirefoxDriver()
   @Shared WebDriverWait wait = new WebDriverWait(driver,10,10)

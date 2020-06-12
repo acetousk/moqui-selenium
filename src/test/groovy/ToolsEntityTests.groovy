@@ -5,7 +5,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import spock.lang.Shared
 import spock.lang.Specification
 
-class EntityToolsTests extends Specification{
+class ToolsEntityTests extends Specification{
 
   @Shared WebDriver driver = new FirefoxDriver()
   @Shared WebDriverWait wait = new WebDriverWait(driver,10,10)
@@ -145,7 +145,7 @@ class EntityToolsTests extends Specification{
     String url = driver.getCurrentUrl()
 
     then:
-    url.contains("submitButton")
+    url.contains("Entity/SqlRunner")
   }
 
   def "tools/Entity/Entities test"(){

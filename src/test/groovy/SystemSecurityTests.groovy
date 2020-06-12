@@ -9,11 +9,14 @@ class SystemSecurityTests extends Specification{
 
   @Shared WebDriver driver = new FirefoxDriver()
   @Shared WebDriverWait wait = new WebDriverWait(driver,10,10)
-  @Shared String user = "potate"
-  @Shared String pass = "Passw0rd!"
-  @Shared String email = "test@moqui.org"
-  @Shared String userGroup = "Test"
-  @Shared String artifactGroup = "TestArtifactGroup"
+  @Shared String user =          "0potate"
+  @Shared String pass =          "0Passw0rd!"
+  @Shared String email =         "0test@moqui.org"
+  @Shared String userGroup =     "0Test"
+  @Shared String artifactGroup = "0TestArtifactGroup"
+  @Shared String name =          "0name"
+  @Shared String value =         "0value"
+  @Shared String value2 =        "0value2"
 
   //set this to true to make a browser not pop up for tests (it will minimize the browser)
   //boolean minimized = true
@@ -78,7 +81,7 @@ class SystemSecurityTests extends Specification{
     String url = driver.getCurrentUrl()
 
     then:
-    url.contains("Security/UserAccount/UserAccountDetail?userId=100000")
+    url.contains("Security/UserAccount/UserAccountDetail")
   }
 
   def "system/ServerAdmin/UserGroups test"(){
@@ -139,11 +142,11 @@ class SystemSecurityTests extends Specification{
     //clickById("ServiceJobForm_submitButton")
 
     clickById("AddParameterDialog-button")
-    sendKeys(By.id("CreateJobParameter_parameterName"),"name")
-    sendKeys(By.id("CreateJobParameter_parameterValue"),"value")
+    sendKeys(By.id("CreateJobParameter_parameterName"),name)
+    sendKeys(By.id("CreateJobParameter_parameterValue"),value)
     clickById("CreateJobParameter_submitButton")
 
-    clearAndSendKeys(By.id("UpdateJobParameter_parameterValue_0"),"value2")
+    clearAndSendKeys(By.id("UpdateJobParameter_parameterValue_0"),value2)
     clickById("UpdateJobParameter_submitButton_0")
     //clickById("UpdateJobParameter_deleteLink_0_deleteJobParameter_button")
     //String alert2 = getAlertTextAndAccept()
@@ -165,14 +168,14 @@ class SystemSecurityTests extends Specification{
     clickElement(By.linkText("System"))
     clickElement(By.linkText("Jobs Runs"))
     clickById("JobRunList_hdialog_button")
-    sendKeys(By.id("JobRunList_header_jobRunId"),"100170")
+    //sendKeys(By.id("JobRunList_header_jobRunId"),"100170")
     clickById("JobRunList_header_findButton")
     clickById("JobRunList_jobName_0_serviceJobDetail")
 
     String url = driver.getCurrentUrl()
 
     then:
-    url.contains("ServiceJob/Jobs/ServiceJobDetail?jobName=autoApprove_OrdersDelayed")
+    url.contains("ServiceJob/Jobs/ServiceJobDetail")
   }
 
   def "system/ServerAdmin/ActiveUsers test"(){

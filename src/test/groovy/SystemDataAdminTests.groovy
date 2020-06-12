@@ -48,75 +48,53 @@ class SystemDataAdminTests extends Specification{
     clickElement(By.className("navbar-brand"))
   }
 
-  def "system/ServerAdmin/ test"(){
+  def "system/DataAdmin/L10n:Messages test"(){
     when:
     clickElement(By.linkText("System"))
-    clickElement(By.linkText(""))
+    clickElement(By.linkText("L10n: Messages"))
+    clickById("CreateMessageDialog-button")
+    sendKeys(By.id("CreateLocalizedMessage_original"),"Original")
+    clickById("CreateLocalizedMessage_submitButton")
+    clickById("UpdateLocalizedMessages_update")
 
     String url = driver.getCurrentUrl()
 
     then:
-    url.contains("system")
+    url.contains("system/Localization/Messages")
   }
 
+  def "system/DataAdmin/L10n:EntityFields test"(){
+    when:
+    clickElement(By.linkText("System"))
+    clickElement(By.linkText("L10n: Entity Fields"))
+    //clickById("CreateEntityFieldDialog-button")
+    //sendKeys(By.id("CreateLocalizedEntityField_entityName"),"EntityName")
+    //sendKeys(By.id("CreateLocalizedEntityField_fieldName"),"FieldName")
+    //clickById("CreateLocalizedEntityField_submitButton")
+    //clickById("UpdateLocalizedEntityFields_delete_0_deleteLocalizedEntityField_button")
+
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("system/Localization/EntityFields")
+  }
+
+  def "system/DataAdmin/ResourceFinder test"(){
+    when:
+    clickElement(By.linkText("System"))
+    clickElement(By.linkText("Resource Finder"))
+    //TODO: add tests to this later
+
+    String url = driver.getCurrentUrl()
+
+    then:
+    url.contains("Resource/ElFinder")
+  }
 
 
   def clickElement(By by){
     wait.until(ExpectedConditions.elementToBeClickable(by))
     driver.findElement(by).click()
-  }
-
-
-  def "system/ServerAdmin/ServiceJobs test"(){
-    when:
-    System.println("If this test fails, (this will often happen if this test is run more than once) manually delete the parameter here http://localhost:8080/vapps/system/ServiceJob/Jobs/ServiceJobDetail?jobName=run_EntitySyncAll_frequent ")
-
-    clickElement(By.linkText("System"))
-    clickElement(By.linkText("Service Jobs"))
-    sendKeys(By.id("ServiceJobList_jobName"),"run_EntitySyncAll_frequent")
-    clickById("ServiceJobList_findButton")
-    clickById("ServiceJobList_jobName_0_serviceJobDetail")
-    clickBySelector("button.btn:nth-child(2)")//run jobs
-
-    String alert1 = getAlertTextAndAccept()
-
-    //clickById("ServiceJobForm_submitButton")
-
-    clickById("AddParameterDialog-button")
-    sendKeys(By.id("CreateJobParameter_parameterName"),"name")
-    sendKeys(By.id("CreateJobParameter_parameterValue"),"value")
-    clickById("CreateJobParameter_submitButton")
-
-    clearAndSendKeys(By.id("UpdateJobParameter_parameterValue_0"),"value2")
-    clickById("UpdateJobParameter_submitButton_0")
-    //clickById("UpdateJobParameter_deleteLink_0_deleteJobParameter_button")
-    //String alert2 = getAlertTextAndAccept()
-
-    clickById("AddUserDialog-button")
-    sendKeys(By.id("CreateJobUser_userId_ac"),"User")
-    clickById("CreateJobUser_submitButton")
-
-    String url = driver.getCurrentUrl()
-
-    then:
-    alert1.contains("Run job now with current parameters?")
-    //alert2.contains("Delete parameter?")
-    url.contains("ServiceJob/Jobs/ServiceJobDetail")
-  }
-
-  def "system/ServerAdmin/JobsRuns test"(){
-    when:
-    clickElement(By.linkText("System"))
-    clickElement(By.linkText("Jobs Runs"))
-    clickById("JobRunList_hdialog_button")
-    sendKeys(By.id("JobRunList_header_jobRunId"),"100170")
-    clickById("JobRunList_header_findButton")
-    clickById("JobRunList_jobName_0_serviceJobDetail")
-
-    String url = driver.getCurrentUrl()
-
-    then:
-    url.contains("ServiceJob/Jobs/ServiceJobDetail?jobName=autoApprove_OrdersDelayed")
   }
 
   def clickBySelector(String selector){
