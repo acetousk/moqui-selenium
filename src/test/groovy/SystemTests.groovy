@@ -18,8 +18,13 @@ class SystemTests extends Specification{
   @Shared String value2 =        "000value2"
 
   //if running these tests more than once, change to the next letter below before running it
-  @Shared String mantleTestId =   "AAAMantleTestId"
-  @Shared String mantleTestName = "AAAMantleTestName"
+  @Shared String mantleTestId =   "AABMantleTestId"
+  @Shared String mantleTestName = "AABMantleTestName"
+  @Shared String original =       "AABOriginal"
+  @Shared String entityName =     "AABEntityName"
+  @Shared String fieldName =      "AABFieldName"
+  @Shared String pk =             "AABpk"
+  @Shared String locale =         "AABUS"
 
   @Shared Helper helper = Helper.get()
 
@@ -56,35 +61,62 @@ class SystemTests extends Specification{
     when:
     helper.clickElement(By.linkText("L10n: Messages"))
     helper.clickById("CreateMessageDialog-button")
-    helper.sendKeys(By.id("CreateLocalizedMessage_original"),"Original")
+    helper.sendKeys(By.id("CreateLocalizedMessage_original"),original)
     helper.clickById("CreateLocalizedMessage_submitButton")
     helper.clickById("UpdateLocalizedMessages_update")
+    helper.sendKeys(By.id("UpdateLocalizedMessages_original"),original)
+    helper.pause(2)
+    helper.clickById("UpdateLocalizedMessages_delete")
+
+    String isOriginal = helper.getTextBySelector("#UpdateLocalizedMessages_table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > span:nth-child(1)")
 
     String url = helper.driver.getCurrentUrl()
 
     then:
     url.contains("Localization/Messages")
+    isOriginal.contains(original)
   }
 
   def "DataAdmin/L10n:EntityFields test"(){
     when:
     helper.clickElement(By.linkText("L10n: Entity Fields"))
-    //helper.clickById("CreateEntityFieldDialog-button")
-    //helper.sendKeys(By.id("CreateLocalizedEntityField_entityName"),"EntityName")
-    //helper.sendKeys(By.id("CreateLocalizedEntityField_fieldName"),"FieldName")
-    //helper.clickById("CreateLocalizedEntityField_submitButton")
-    //helper.clickById("UpdateLocalizedEntityFields_delete_0_deleteLocalizedEntityField_button")
+    helper.clickById("CreateEntityFieldDialog-button")
+    helper.sendKeys(By.id("CreateLocalizedEntityField_entityName"),entityName)
+    helper.sendKeys(By.id("CreateLocalizedEntityField_fieldName"),fieldName)
+    helper.sendKeys(By.id("CreateLocalizedEntityField_pkValue"),pk)
+    helper.sendKeys(By.id("CreateLocalizedEntityField_locale"),locale)
+    helper.clickById("CreateLocalizedEntityField_submitButton")
+
+    helper.sendKeys(By.id("UpdateLocalizedEntityFields_entityName"),entityName)
+    //helper.pause(2)
+    helper.clickById("UpdateLocalizedEntityFields_delete")
+
+    String isEntityName = helper.getTextBySelector("#UpdateLocalizedEntityFields_table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > span:nth-child(1)")
+    System.println("isEntityName = " + isEntityName)
+    String isFieldName = helper.getTextBySelector("#UpdateLocalizedEntityFields_table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(2) > div:nth-child(1) > span:nth-child(1)")
+    System.println("isFieldName = " + isFieldName)
+    String isPk = helper.getTextBySelector("#UpdateLocalizedEntityFields_table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(3) > div:nth-child(1) > span:nth-child(1)")
+    System.println("isPk = " + isPk)
+    String isLocale = helper.getTextBySelector("#UpdateLocalizedEntityFields_table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(4) > div:nth-child(1) > span:nth-child(1)")
+    System.println("isLocale = " + isLocale)
+
+    helper.clickById("UpdateLocalizedEntityFields_delete_0_deleteLocalizedEntityField_button")
 
     String url = helper.driver.getCurrentUrl()
 
     then:
     url.contains("Localization/EntityFields")
+    isEntityName.contains(entityName)
+    isFieldName.contains(fieldName)
+    isPk.contains(pk)
+    isLocale.contains(locale)
   }
 
   def "DataAdmin/ResourceFinder test"(){
     when:
     helper.clickElement(By.linkText("Resource Finder"))
     //TODO: add tests to this later
+    //it will take some work and may not be necessary
 
     String url = helper.driver.getCurrentUrl()
 
@@ -96,12 +128,19 @@ class SystemTests extends Specification{
     when:
     helper.clickElement(By.linkText("Export"))
 
+    helper.select(By.cssSelector(".select2-search__field"),3)
+    helper.clickBySelector("#ExportDocuments_output_1 > input:nth-child(1)")
+    helper.clickById("ExportDocuments_submitButton")
+    String isError = helper.getTextBySelector(".text-inline")
+
     String url = helper.driver.getCurrentUrl()
 
     then:
     url.contains("DataDocument/Export")
+    isError.contains("Path is not a directory.")
   }
 
+  //TODO: Start back here
   def "DataDocumentAndFeeds/FeedIndex test"(){
     when:
     helper.clickElement(By.linkText("Feed Index"))
@@ -251,7 +290,6 @@ class SystemTests extends Specification{
     then:
     url.contains("Security/ArtifactGroup/ArtifactGroupDetail")
   }
-
 
   def "Security/ServiceJobs test"(){
     when:

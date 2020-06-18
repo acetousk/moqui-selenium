@@ -7,8 +7,8 @@ import spock.lang.Specification
 
 class ToolsTests extends Specification{
 
-  @Shared String entityName =  "AAAEntityName"
-  @Shared String packageName = "AAAPackageName"
+  @Shared String entityName =  "AaaaEntityName"
+  @Shared String packageName = "zaaapackagename"
   @Shared Helper helper = Helper.get()
 
   def setupSpec(){
@@ -142,12 +142,18 @@ class ToolsTests extends Specification{
     helper.sendKeys(By.id("UpdateEntityValue_imageUrl"),"https://youtu.be/5SoJIEwe3cA?t=1696")
     helper.sendKeys(By.id("UpdateEntityValue_paymentFraudEvidenceId"),"worlds 2020 was FAKE!")
     helper.clickById("UpdateEntityValue_submitButton")
+
+    helper.clickById("RelatedEntities_link_0_edit")
+
+    String text = helper.getTextBySelector("pre.text-inline")
+
     helper.clearAndSendKeys(By.id("LevelsForm_dependentLevels"),"5")
     helper.clickById("LevelsForm_submitButton")
     String url = helper.driver.getCurrentUrl()
 
     then:
     url.contains("Entity")
+    text.contains("PaymentMethodType")
   }
 
   def "Entity/DataViews test"(){
@@ -156,14 +162,25 @@ class ToolsTests extends Specification{
     helper.sendKeys(By.id("CreateDbViewEntity_dbViewEntityName"),entityName)
     helper.sendKeys(By.id("CreateDbViewEntity_packageName"),packageName)
     helper.clickById("CreateDbViewEntity_submitButton")
+
+    helper.clickBySelector("#ListDbViewEntities_table > thead:nth-child(1) > tr:nth-child(2) > th:nth-child(2) > div:nth-child(1) > div:nth-child(1) > span:nth-child(1) > a:nth-child(2) > i:nth-child(1)")
+
+    String isEntityName = helper.getTextBySelector("#ListDbViewEntities_table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > span:nth-child(1)")
+    System.println("isEntityName = " + isEntityName)
+    String isPackageName = helper.getTextBySelector("#ListDbViewEntities_table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(2) > div:nth-child(1) > span:nth-child(1)")
+    System.println("isPackageName = " + isPackageName)
+
     helper.clickById("ListDbViewEntities_edit_0_edit")
     helper.clickBySelector("a.btn-primary:nth-child(1)")
     String url = helper.driver.getCurrentUrl()
 
     then:
-    url.contains("Entityname")
+    url.contains("DataView")
+    //isEntityName.contains(entityName)
+    //isPackageName.contains(packageName)
   }
 
+  //TODO:start here
   def "Entity/SpeedTest test"(){
     when:
     helper.clickElement(By.linkText("Speed Test"))
@@ -211,7 +228,6 @@ class ToolsTests extends Specification{
     then:
     url.contains("AutoScreen/AutoFind")
   }
-
 
   def "Generaltools/ArtifactStats test"(){
     when:

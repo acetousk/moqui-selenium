@@ -7,13 +7,14 @@ import org.openqa.selenium.support.ui.ExpectedCondition
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.Select
+import java.util.concurrent.TimeUnit
 
 class Helper {
 
     private static Helper instance = null
 
-    private WebDriver driver
-    private WebDriverWait wait
+    public WebDriver driver
+    public WebDriverWait wait
 
     private Helper(){
         System.println("Importing Gecko Driver (if this fails you may need to change the path in the code)")
@@ -91,5 +92,22 @@ class Helper {
         wait.until(ExpectedConditions.visibilityOfElementLocated(by))
         select.selectByVisibleText(text)
     }
+
+    def pause(long timeInSeconds){
+        TimeUnit.SECONDS.sleep(timeInSeconds);
+    }
+
+    String getText(By by){
+        return driver.findElement(by).getText()
+    }
+
+    String getTextBySelector(String selectorString){
+        getText(By.cssSelector(selectorString))
+    }
+
+    String getTextById(String idString){
+        getText(By.cssSelector(idString))
+    }
+
 
 }
