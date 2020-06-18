@@ -1,9 +1,12 @@
 package Selenium
 
+import org.junit.rules.ExpectedException
 import org.openqa.selenium.*
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.support.ui.ExpectedCondition
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
+import org.openqa.selenium.support.ui.Select
 
 class Helper {
 
@@ -82,4 +85,11 @@ class Helper {
         }
         sendKeys(by,Keys.ENTER)
     }
+
+    def selectVisibleText(By by, String text){
+        Select select = new Select(driver.findElement(by))
+        wait.until(ExpectedConditions.visibilityOfElementLocated(by))
+        select.selectByVisibleText(text)
+    }
+
 }
