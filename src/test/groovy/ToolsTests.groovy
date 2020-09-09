@@ -9,63 +9,57 @@ class ToolsTests extends Specification{
 
   @Shared String entityName =  "AaaaEntityName"
   @Shared String packageName = "zaaapackagename"
+
+  @Shared String apps = "vapps"
   @Shared Helper helper = Helper.get()
 
-  def setupSpec(){
-    System.println("Start Framework Browser Tests")
-
-    helper.driver.get("http://localhost:8080")
-    helper.clickElement(By.id("TestLoginLink_button"))
-
-    helper.driver.manage().window().setPosition(new Point(0, 0));
-    helper.driver.manage().window().setSize(new Dimension(1080, 720))
-  }
-
-  def cleanupSpec(){
-    helper.driver.get("http://localhost:8080")
-    helper.driver.findElement(By.cssSelector(".glyphicon-off")).click()
-    System.println(helper.getAlertTextAndAccept())
-
-    helper.driver.quit()
-
-    System.println("Framework Browser Tests Done!")
-  }
-
-  def setup(){
-    helper.driver.get("http://localhost:8080")
-    helper.clickElement(By.linkText("Tools"))
-  }
-
-  def cleanup(){
-    helper.clickElement(By.className("navbar-brand"))
-  }
+  def setupSpec(){ helper.setupSpec() }
+  def cleanupSpec(){ helper.cleanupSpec() }
+  def setup(){ helper.setup(apps,"Tools") }
+  def cleanup(){ helper.cleanup(apps) }
 
   def "Entity/DataImport test"(){
     when:
-    helper.clickElement(By.linkText("Data Import"))
-    helper.clearAndSendKeys(By.cssSelector("#ImportData_timeout"),"30")
-    helper.clickBySelector("#ImportData_dummyFks > input:nth-child(1)")
-    helper.sendKeys(By.cssSelector("#ImportData_types"),"foo")
-    helper.sendKeys(By.xpath("//*[@id=\"ImportData_components\"]"),"goo")
-    helper.clickBySelector("#ImportData_accordion_heading2 > h5:nth-child(1) > a:nth-child(1)")
-    helper.sendKeys(By.cssSelector("#ImportData_location"),"boo")
-    helper.clickBySelector("#ImportData_accordion_heading3 > h5:nth-child(1) > a:nth-child(1)")
-    helper.clearAndSendKeys(By.cssSelector("#ImportData_xmlText"),"<facade-xml></facade-xml>")
-    helper.clickBySelector("#ImportData_accordion_heading4 > h5:nth-child(1) > a:nth-child(1)")
-    helper.sendKeys(By.cssSelector("#ImportData_jsonText"),"JSON stuff")
-    helper.clickBySelector("#ImportData_accordion_heading5 > h5:nth-child(1) > a:nth-child(1)")
-    helper.sendKeys(By.cssSelector("#ImportData_csvText"),"CSV stuff")
-    helper.clickBySelector("#ImportData_checkOnly")
-    helper.clickBySelector("#ImportData_onlyCreate")
+    helper.clickByText("Data Import")
+
+    helper.clearAndSendKeysBySelector("input[name='timeout'","30")
+    helper.clickBySelector("#ImportData_dummyFks")
+    helper.sendKeysBySelector("input[name='types']","a_data_type")
+    helper.sendKeysBySelector("input[name='components']","a_data_component")
+
+    helper.clickBySelector("a[aria-controls='ImportData_accordion_collapse2']")
+    helper.sendKeysBySelector("input[name='location']","a_resource_location")
+    helper.clickBySelector("a[aria-controls='ImportData_accordion_collapse3']")
+    helper.clearAndSendKeysBySelector("textarea[name='xmlText']","<xml>a text</xml>")
+    helper.clickBySelector("a[aria-controls='ImportData_accordion_collapse4']")
+    helper.clearAndSendKeysBySelector("textarea[name='jsonText']","json=\"a text\"")
+    helper.clickBySelector("a[aria-controls='ImportData_accordion_collapse5']")
+    helper.clearAndSendKeysBySelector("textarea[name='csvText']",";a;c,s,v;t,e,x,t;")
+
+    helper.clickBySelector("button[name='checkOnly']")
+    String message1 = helper.getNotificationMessage(apps)
+
+    helper.clickBySelector("button[name='onlyCreate']")
     String alert1 = helper.getAlertTextAndAccept()
-    helper.clickBySelector("#ImportData_importButton")
+    String message2 = helper.getNotificationMessage(apps)
+
+    helper.clickBySelector("button[name='importButton']")
     String alert2 = helper.getAlertTextAndAccept()
+    String message3 = helper.getNotificationMessage(apps)
+
     String url = helper.driver.getCurrentUrl()
 
     then:
-    url.contains("Entity/DataImport")
+    /**
+     * the following messages aren't the same between vapps and qapps because qapps is in beta still
+     */
+    //message1 == "No differences found in check"
+    //message2 == "No differences found in check"
+    //message2 == "No differences found in check"
+
     alert1 == "Are you sure you want to load data, only creating missing records?"
     alert2 == "Are you sure you want to load data, creating new and updating existing records? If in doubt, cancel this and double check."
+    url.contains("Entity/DataImport")
   }
 
   def "Entity/DataExport test"(){

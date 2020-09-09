@@ -7,55 +7,47 @@ import spock.lang.Specification
 
 class SystemTests extends Specification{
 
-  //if running these tests more than once, add 1 to the number below before running it
-  @Shared String user =          "000potate"
-  @Shared String pass =          "000Passw0rd!"
-  @Shared String email =         "000test@moqui.org"
-  @Shared String userGroup =     "000Test"
-  @Shared String artifactGroup = "000TestArtifactGroup"
-  @Shared String name =          "000name"
-  @Shared String value =         "000value"
-  @Shared String value2 =        "000value2"
-
   //if running these tests more than once, change to the next letter below before running it
-  @Shared String mantleTestId =   "AABMantleTestId"
-  @Shared String mantleTestName = "AABMantleTestName"
-  @Shared String original =       "AABOriginal"
-  @Shared String entityName =     "AABEntityName"
-  @Shared String fieldName =      "AABFieldName"
-  @Shared String pk =             "AABpk"
-  @Shared String locale =         "AABUS"
+  @Shared String user =           "test"
+  @Shared String pass =           "P@ssw0rd!"
+  @Shared String email =          "test@moqui.org"
+  @Shared String userGroup =      "Test"
+  @Shared String artifactGroup =  "TestArtifactGroup"
+  @Shared String name =           "name"
+  @Shared String value =          "value"
+  @Shared String value2 =         "value2"
+  @Shared String mantleTestId =   "MantleTestId"
+  @Shared String mantleTestName = "MantleTestName"
+  @Shared String original =       "Original"
+  @Shared String entityName =     "EntityName"
+  @Shared String fieldName =      "FieldName"
+  @Shared String pk =             "pk"
+  @Shared String locale =         "US"
 
   @Shared Helper helper = Helper.get()
 
   def setupSpec(){
-    System.println("Start Framework Browser Tests")
+    helper.setupSpec()
 
-    helper.driver.get("http://localhost:8080")
-    helper.clickElement(By.id("TestLoginLink_button"))
-
-    helper.driver.manage().window().setPosition(new Point(0, 0));
-    helper.driver.manage().window().setSize(new Dimension(1080, 720))
+    user =           helper.prependString(user)
+    pass =           helper.prependString(pass)
+    email =          helper.prependString(email)
+    userGroup =      helper.prependString(userGroup)
+    artifactGroup =  helper.prependString(artifactGroup)
+    name =           helper.prependString(name)
+    value =          helper.prependString(value)
+    value2 =         helper.prependString(value2)
+    mantleTestId =   helper.prependString(mantleTestId)
+    mantleTestName = helper.prependString(mantleTestName)
+    original =       helper.prependString(original)
+    entityName =     helper.prependString(entityName)
+    fieldName =      helper.prependString(fieldName)
+    pk =             helper.prependString(pk)
+    locale =         helper.prependString(locale)
   }
-
-  def cleanupSpec(){
-    helper.driver.get("http://localhost:8080")
-    helper.driver.findElement(By.cssSelector(".glyphicon-off")).click()
-    System.println(helper.getAlertTextAndAccept())
-
-    helper.driver.quit()
-
-    System.println("Framework Browser Tests Done!")
-  }
-
-  def setup(){
-    helper.driver.get("http://localhost:8080")
-    helper.clickElement(By.linkText("System"))
-  }
-
-  def cleanup(){
-    helper.clickElement(By.className("navbar-brand"))
-  }
+  def cleanupSpec(){ helper.cleanupSpec() }
+  def setup(){ helper.setup("vapps","System") }
+  def cleanup(){ helper.cleanup() }
 
   def "DataAdmin/L10n:Messages test"(){
     when:
@@ -64,8 +56,8 @@ class SystemTests extends Specification{
     helper.sendKeys(By.id("CreateLocalizedMessage_original"),original)
     helper.clickById("CreateLocalizedMessage_submitButton")
     helper.clickById("UpdateLocalizedMessages_update")
+    helper.get().driver.navigate().refresh()
     helper.sendKeys(By.id("UpdateLocalizedMessages_original"),original)
-    helper.pause(2)
     helper.clickById("UpdateLocalizedMessages_delete")
 
     String isOriginal = helper.getTextBySelector("#UpdateLocalizedMessages_table > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > span:nth-child(1)")
@@ -234,8 +226,12 @@ class SystemTests extends Specification{
     helper.sendKeys(By.id("CreateUserAccount_newPasswordVerify"),pass)
     helper.clickById("CreateUserAccount_submitButton")
 
-    helper.sendKeys(By.id("UserAccountList_username"),user)
-    helper.clickById("UserAccountList_find")
+//    helper.sendKeys(By.id("UserAccountList_username"),user)
+//    helper.clickById("UserAccountList_find")
+
+    helper.clickById("UserAccountList_hdialog_button")
+    helper.sendKeys(By.id("UserAccountList_header_username"),user)
+    helper.clickById("UserAccountList_header_find")
 
     helper.clickById("UserAccountList_username_0_userAccountDetail")
 
@@ -315,9 +311,11 @@ class SystemTests extends Specification{
     //helper.clickById("UpdateJobParameter_deleteLink_0_deleteJobParameter_button")
     //String alert2 = helper.getAlertTextAndAccept()
 
-    helper.clickById("AddUserDialog-button")
-    helper.sendKeys(By.id("CreateJobUser_userId_ac"),"User")
-    helper.clickById("CreateJobUser_submitButton")
+    //helper.clickById("AddUserDialog-button")
+    //helper.pause(2)
+    //helper.clickElement(By.className("select2-selection--single"))
+    //helper.sendKeys(By.cssSelector(".select2-search__field"),"User")
+    //helper.clickById("CreateJobUser_submitButton")
 
     String url = helper.driver.getCurrentUrl()
 
