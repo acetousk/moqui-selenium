@@ -64,17 +64,22 @@ class Helper {
     }
 
     def clickByText(String text){
-        System.println("clicking by link text: " + text)
+//        System.println("clicking by link text: " + text)
         clickElement(By.linkText(text))
     }
 
+    def clickByPath(String text){
+//        System.println("clicking by xpath text: " + text)
+        clickElement(By.xpath(text))
+    }
+
     def clickBySelector(String selector){
-        System.println("clicking by selector: " + selector)
+//        System.println("clicking by selector: " + selector)
         clickElement(By.cssSelector(selector))
     }
 
     def clickById(String id){
-        System.println("clicking by id: " + id)
+//        System.println("clicking by id: " + id)
         clickElement(By.id(id))
     }
 
