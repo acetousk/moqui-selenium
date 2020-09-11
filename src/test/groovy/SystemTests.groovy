@@ -219,6 +219,7 @@ class SystemTests extends Specification{
     url.contains("EntitySync/EntitySyncList")
   }
 
+  /*
   def "Security/Users test"(){
     when:
     helper.clickElement(By.linkText("Users"))
@@ -249,7 +250,7 @@ class SystemTests extends Specification{
 
     then:
     url.contains("Security/UserAccount/UserAccountDetail")
-  }
+  }//*/
 
   def "Security/UserGroups test"(){
     when:
