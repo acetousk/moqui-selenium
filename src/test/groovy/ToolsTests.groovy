@@ -8,11 +8,12 @@ import spock.lang.Specification
 
 class ToolsTests extends Specification{
 
+  @Shared String apps = "vapps"
+
   @Shared String entityName =  "AaaaEntityName"
   @Shared String packageName = "zaaapackagename"
 
-  @Shared String apps = "qapps"
-  @Shared Helper helper = Helper.get()
+  @Shared Helper helper = new Helper()
 
   def setupSpec(){ helper.setupSpec() }
   def cleanupSpec(){ helper.cleanupSpec() }

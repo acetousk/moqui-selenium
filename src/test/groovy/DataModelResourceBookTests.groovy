@@ -7,12 +7,14 @@ import spock.lang.Specification
 
 class DataModelResourceBookTests extends Specification{
 
-    @Shared Helper helper = Helper.get()
+    @Shared String apps = "vapps"
+
+    @Shared Helper helper = new Helper()
 
     def setupSpec(){ helper.setupSpec() }
     def cleanupSpec(){ helper.cleanupSpec() }
-    def setup(){ helper.setup("qapps","POPC ERP") }
-    def cleanup(){ helper.cleanup() }
+    def setup(){ helper.setup(apps,"POPC ERP") }
+    def cleanup(){ helper.cleanup(apps) }
 
     /**
      * What are the attributes or characteristics of the people and organizations that are involved in the course of conducting business?

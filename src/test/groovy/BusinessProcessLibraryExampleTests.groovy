@@ -7,30 +7,22 @@ import Selenium.Helper
 
 class BusinessProcessLibraryExampleTests extends Specification{
 
-    @Shared Helper helper = Helper.get()
+    @Shared String apps = "vapps"
+
+    @Shared Helper helper = new Helper()
 
     def setupSpec() {
         System.println("Start Framework Browser Tests")
-
-        helper.driver.get("http://localhost:8080")
-        helper.clickElement(By.id("TestLoginLink_button"))
-
-        helper.driver.manage().window().setPosition(new Point(0, 0));
-        helper.driver.manage().window().setSize(new Dimension(1080, 720))
+        helper.setupSpec()
     }
 
     def cleanupSpec() {
-        helper.driver.get("http://localhost:8080")
-        helper.driver.findElement(By.cssSelector(".glyphicon-off")).click()
-        System.println(helper.getAlertTextAndAccept())
-
-        helper.driver.quit()
-
+        helper.cleanupSpec()
         System.println("Framework Browser Tests Done!")
     }
 
     def setup() {
-        helper.driver.get("http://localhost:8080")
+        helper.driver.get("http://localhost:8080/" + apps)
     }
 
     def cleanup() {

@@ -1,7 +1,5 @@
 package Selenium
 
-import org.apache.tools.ant.taskdefs.Local
-import org.junit.rules.ExpectedException
 import org.openqa.selenium.*
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.support.ui.ExpectedCondition
@@ -9,32 +7,22 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.support.ui.Select
 import java.util.concurrent.TimeUnit
-import java.util.Random
 
 class Helper {
-
-    private static Helper instance = null
 
     public WebDriver driver
     public WebDriverWait wait
 
-    private Helper(){
+    Helper() {
         System.println("Importing Gecko Driver (if this fails you may need to change the path in the code)")
 
         //for different installations the path needs to change
-        System.setProperty("webdriver.gecko.driver", "/home/utah/java/moqui-selenium/geckodriver")
+        System.setProperty("webdriver.gecko.driver", "./geckodriver")
 
         System.println("Connecting Selenium WebDriver to Moqui through http (this may also have to be changed to wherever Moqui is being ran)")
 
         driver = new FirefoxDriver()
         wait = new WebDriverWait(driver,10,10)
-    }
-
-    static get(){
-        if(instance == null){
-            instance = new Helper()
-        }
-        return instance
     }
 
     String getText(By by){
@@ -142,7 +130,8 @@ class Helper {
     def setupSpec(){
         System.println("Start Framework Browser Tests")
 
-        driver.get("http://localhost:8080")
+        // go to /apps to force login
+        driver.get("http://localhost:8080/apps")
         clickById("TestLoginLink_button")
 
         driver.manage().window().setPosition(new Point(0, 0));
@@ -156,12 +145,11 @@ class Helper {
     }
 
     def setup(String apps, String linkText){
-        String url = "http://localhost:8080/" + apps
-        driver.get(url)
+        driver.get("http://localhost:8080/" + apps)
         clickByText(linkText)
     }
 
-    def cleanup(String apps = ""){
+    def cleanup(String apps) {
         driver.get("http://localhost:8080/" + apps)
     }
 
