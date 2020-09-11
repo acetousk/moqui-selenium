@@ -139,6 +139,12 @@ class Helper {
         return "A" + prepend + string
     }
 
+    String AlphaNumericString = "abcdefghijklmnopqrstuvxyz";
+    String appendString(String string){
+        Random rand = new Random()
+        return string + AlphaNumericString[rand.nextInt(25)] + AlphaNumericString[rand.nextInt(25)] + AlphaNumericString[rand.nextInt(25)]
+    }
+
     def setupSpec(){
         System.println("Start Framework Browser Tests")
 
